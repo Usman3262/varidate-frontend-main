@@ -117,7 +117,7 @@ const FileUpload = ({ label, onDrop, file, className = "" }) => {
   });
 
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-1 field-${name} ${className}`}>
       <div className="flex items-center gap-1">
         <VerificationBadge level="Silver" />
         <label className="block text-xs font-semibold text-slate-700">
@@ -182,7 +182,7 @@ const VerificationBadge = ({ level }) => {
 
 const Input = ({ label, name, value, onChange, required = false, type = "text", className = "", disabled = false }) => {
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-1 field-${name} ${className}`}>
       <div className="flex items-center gap-1">
         <VerificationBadge level="Silver" />
         <label className="block text-xs font-semibold text-slate-700">
@@ -207,7 +207,7 @@ const Input = ({ label, name, value, onChange, required = false, type = "text", 
 
 const Select = ({ name, label, value, onChange, options, defaultOption, className = "", disabled = false }) => {
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-1 field-${name} ${className}`}>
       <div className="flex items-center gap-1">
         <VerificationBadge level="Silver" />
         {label && <label className="block text-xs font-semibold text-slate-700">{label}</label>}
@@ -232,7 +232,7 @@ const Select = ({ name, label, value, onChange, options, defaultOption, classNam
   );
 };
 
-const DateInput = ({ label, value, onChange, className = "", disabled = false }) => {
+const DateInput = ({ label, name, value, onChange, className = "", disabled = false }) => {
   const formatDateForInput = (date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -241,13 +241,14 @@ const DateInput = ({ label, value, onChange, className = "", disabled = false })
   };
 
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-1 field-${name} ${className}`}>
       <div className="flex items-center gap-1">
         <VerificationBadge level="Silver" />
         <label className="block text-xs font-semibold text-slate-700">{label}</label>
       </div>
       <input
         type="date"
+        name={name}
         value={formatDateForInput(value)}
         onChange={(e) => {
           const date = e.target.value ? new Date(e.target.value) : null;
@@ -296,7 +297,7 @@ const CheckboxGroup = ({ legend, options, selectedOptions, onChange, className =
 
 const FileUploadButton = ({ label, onChange, className = "", disabled = false }) => {
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`space-y-1 field-${name} ${className}`}>
       <div className="flex items-center gap-1">
         <VerificationBadge level="Silver" />
         <label className="block text-xs font-semibold text-slate-700">{label}</label>
@@ -684,29 +685,29 @@ const validateForm = () => {
   const { personal } = formData;
 
   // Required personal information
-  if (!personal.name?.trim()) errors.push({ field: 'name', message: 'Name is required' });
-  if (!personal.fatherName?.trim()) errors.push({ field: 'fatherName', message: "Father's Name is required" });
-  if (!personal.cnic?.trim()) errors.push({ field: 'cnic', message: 'CNIC is required' });
-  if (!personal.gender?.trim()) errors.push({ field: 'gender', message: 'Gender is required' });
-  if (!personal.dob) errors.push({ field: 'dob', message: 'Date of Birth is required' });
-  if (!personal.mobile?.trim()) errors.push({ field: 'mobile', message: 'Mobile number is required' });
-  if (!personal.email?.trim()) errors.push({ field: 'email', message: 'Email is required' });
-  if (!personal.city?.trim()) errors.push({ field: 'city', message: 'City is required' });
-  if (!personal.residentStatus?.trim()) errors.push({ field: 'residentStatus', message: 'Resident Status is required' });
+  if (!personal.name?.trim()) errors.push({ field: 'name', message: 'Name is required', fieldClass: 'name' });
+  if (!personal.fatherName?.trim()) errors.push({ field: 'fatherName', message: "Father's Name is required", fieldClass: 'fatherName' });
+  if (!personal.cnic?.trim()) errors.push({ field: 'cnic', message: 'CNIC is required', fieldClass: 'cnic' });
+  if (!personal.gender?.trim()) errors.push({ field: 'gender', message: 'Gender is required', fieldClass: 'gender' });
+  if (!personal.dob) errors.push({ field: 'dob', message: 'Date of Birth is required', fieldClass: 'dob' });
+  if (!personal.mobile?.trim()) errors.push({ field: 'mobile', message: 'Mobile number is required', fieldClass: 'mobile' });
+  if (!personal.email?.trim()) errors.push({ field: 'email', message: 'Email is required', fieldClass: 'email' });
+  if (!personal.city?.trim()) errors.push({ field: 'city', message: 'City is required', fieldClass: 'city' });
+  if (!personal.residentStatus?.trim()) errors.push({ field: 'residentStatus', message: 'Resident Status is required', fieldClass: 'residentStatus' });
 
   // Validate CNIC format (basic validation)
   if (personal.cnic && !/^\d{5}-\d{7}-\d{1}$/.test(personal.cnic) && !/^\d{13}$/.test(personal.cnic)) {
-    errors.push({ field: 'cnic', message: 'CNIC should be in format XXXXX-XXXXXXX-X or 13 digits' });
+    errors.push({ field: 'cnic', message: 'CNIC should be in format XXXXX-XXXXXXX-X or 13 digits', fieldClass: 'cnic' });
   }
 
   // Validate email format
   if (personal.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personal.email)) {
-    errors.push({ field: 'email', message: 'Please enter a valid email address' });
+    errors.push({ field: 'email', message: 'Please enter a valid email address', fieldClass: 'email' });
   }
 
   // Validate mobile number (basic Pakistan format)
   if (personal.mobile && !/^(\+92|0)?3\d{9}$/.test(personal.mobile.replace(/\s/g, ''))) {
-    errors.push({ field: 'mobile', message: 'Please enter a valid mobile number (e.g., 03XXXXXXXXX)' });
+    errors.push({ field: 'mobile', message: 'Please enter a valid mobile number (e.g., 03XXXXXXXXX)', fieldClass: 'mobile' });
   }
 
   // Check for at least one education entry with required fields
@@ -715,7 +716,7 @@ const validateForm = () => {
       if (edu.degreeTitle?.trim()) {
         // If degree title is filled, check other fields
         if (!edu.institute?.trim()) {
-          errors.push({ field: `education-${index}-institute`, message: `Institute is required for education entry ${index + 1}` });
+          errors.push({ field: `education-${index}-institute`, message: `Institute is required for education entry ${index + 1}`, fieldClass: `education-${index}` });
         }
       }
     });
@@ -733,32 +734,25 @@ const handleSubmit = async (e) => {
   if (validationErrors.length > 0) {
     // Show first error in toast
     toast.error(validationErrors[0].message);
+
+    // Scroll to first missing field using fieldClass
+    const firstError = validationErrors[0];
+    let elementToScroll = null;
     
-    // Scroll to first missing field
-    const firstErrorField = validationErrors[0].field;
-    let elementToScroll;
-    
-    if (firstErrorField.includes('education')) {
-      // Handle education fields
-      const index = parseInt(firstErrorField.split('-')[1]);
-      elementToScroll = document.getElementById(`education-${index}`);
-    } else if (firstErrorField.includes('experience')) {
-      // Handle experience fields
-      const index = parseInt(firstErrorField.split('-')[1]);
-      elementToScroll = document.getElementById(`experience-${index}`);
-    } else {
-      // Handle personal fields - find input by name attribute
-      elementToScroll = document.querySelector(`input[name="${firstErrorField}"], select[name="${firstErrorField}"]`);
+    if (firstError.fieldClass) {
+      // Find the parent div with the field class
+      elementToScroll = document.querySelector(`.field-${firstError.fieldClass}`);
     }
-    
+
     if (elementToScroll) {
       elementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // Add focus if it's an input/select
-      if (elementToScroll.focus) {
-        elementToScroll.focus();
+      // Focus the input/select inside
+      const input = elementToScroll.querySelector('input, select, textarea');
+      if (input) {
+        input.focus();
       }
     }
-    
+
     return;
   }
 
@@ -1137,7 +1131,7 @@ const handleSubmit = async (e) => {
                     name="nationality"
                     value={formData.personal.nationality}
                     onChange={handlePersonalChange}
-                   disabled={!!profile && !isEditMode}
+                    disabled={!!profile && !isEditMode}
                   />
                 </FieldWrapper>
 
@@ -1146,12 +1140,15 @@ const handleSubmit = async (e) => {
                   formData={formData} 
                   handleFieldVisibility={handleFieldVisibility}
                   disabled={!!profile && !isEditMode}
+                  required
                 >
                   <DateInput
                     label="Date of Birth"
+                    name="dob"
                     value={formData.personal.dob}
+                    required
                     onChange={handleDobChange}
-                 disabled={!!profile && !isEditMode}
+                    disabled={!!profile && !isEditMode}
                   />
                 </FieldWrapper>
 
@@ -1266,7 +1263,7 @@ const handleSubmit = async (e) => {
           >
             <div className="space-y-3">
               {formData.education.map((edu, index) => (
-                <div key={edu.id} className="bg-white rounded-lg p-3 shadow border border-gray-100">
+                <div key={edu.id} id={`education-${index}`} className="bg-white rounded-lg p-3 shadow border border-gray-100">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-1">
@@ -1414,7 +1411,7 @@ const handleSubmit = async (e) => {
           >
             <div className="space-y-3">
               {formData.experience.map((exp, index) => (
-                <div key={exp.id} className="bg-white rounded-lg p-3 shadow border border-gray-100">
+                <div key={exp.id} id={`experience-${index}`} className="bg-white rounded-lg p-3 shadow border border-gray-100">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-1">
