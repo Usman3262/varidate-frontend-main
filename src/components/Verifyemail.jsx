@@ -70,7 +70,7 @@ const handleResend = async () => {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 required
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d]"
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] placeholder:text-black"
                 placeholder="Enter 6-digit code"
               />
             </div>

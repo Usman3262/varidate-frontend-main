@@ -46,7 +46,8 @@ const ForgotPassword = () => {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] mb-4"
+            placeholder="your@email.com"
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] mb-4 placeholder:text-gray-400"
             disabled={codeSent}
           />
 
@@ -59,7 +60,8 @@ const ForgotPassword = () => {
                 value={code}
                 required
                 onChange={(e) => setCode(e.target.value)}
-                className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] mb-4"
+                placeholder="Enter 6-digit code"
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] mb-4 placeholder:text-gray-400"
               />
 
               <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
@@ -70,7 +72,8 @@ const ForgotPassword = () => {
                   required
                   minLength={5}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d]"
+                  placeholder="Enter new password"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#f4793d] placeholder:text-gray-400"
                 />
                 <button
                   type="button"

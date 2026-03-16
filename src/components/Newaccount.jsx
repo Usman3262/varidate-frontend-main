@@ -41,7 +41,7 @@ function Newaccount() {
 
   const response = await dispatch(signupuserform(formData));
 
-  if (!response.error) {
+  if (response && !response.error) {
     const { id, email } = response.payload;
 
     // ✅ Save ID and email in localStorage
@@ -50,8 +50,6 @@ function Newaccount() {
 
     // Navigate to verification page
     navigate('/verify-email', { state: { email } });
-  } else {
-    toast.error("Signup failed.");
   }
 };
 
@@ -96,8 +94,8 @@ function Newaccount() {
                       value={formData.firstname}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition"
                       placeholder="John"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition placeholder:text-gray-400"
                     />
                   </div>
                   <div>
@@ -108,8 +106,8 @@ function Newaccount() {
                       value={formData.lastname}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition"
                       placeholder="Doe"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition placeholder:text-gray-400"
                     />
                   </div>
                 </div>
@@ -122,8 +120,8 @@ function Newaccount() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition"
                     placeholder="your@email.com"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition placeholder:text-gray-400"
                   />
                 </div>
 
@@ -137,8 +135,8 @@ function Newaccount() {
                       onChange={handleChange}
                       required
                       minLength="5"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition pr-10"
                       placeholder="Enter Password"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f4793d] focus:border-transparent transition pr-10 placeholder:text-gray-400"
                     />
                     <button
                       type="button"

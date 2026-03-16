@@ -2,4 +2,25 @@
 @plugin "daisyui" {
     themes: all;
   }
+
+/* Placeholder styling - make it visible but distinct from user input */
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gray-400 - visible but lighter than user text */
+  opacity: 1;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  color: #d1d5db; /* gray-300 - even lighter when focused */
+}
+
+/* DaisyUI form inputs */
+.daisyui-input::placeholder,
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
   

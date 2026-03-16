@@ -8,7 +8,7 @@ export const signupuserform = createAsyncThunk(
     try {
       const response = await axiosinstance.post("/post", user);
       toast.success(response.data.message);
-      return null; // No user object returned from backend
+      return response.data; // Return the response data with user id and email
     } catch (error) {
       const errMsg = error.response?.data?.message || "Signup failed";
       toast.error(errMsg);

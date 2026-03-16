@@ -679,11 +679,96 @@ const [isEditMode, setIsEditMode] = useState(false);  // If not already defined
     }));
   };
 
+const validateForm = () => {
+  const errors = [];
+  const { personal } = formData;
+
+  // Required personal information
+  if (!personal.name?.trim()) errors.push({ field: 'name', message: 'Name is required' });
+  if (!personal.fatherName?.trim()) errors.push({ field: 'fatherName', message: "Father's Name is required" });
+  if (!personal.cnic?.trim()) errors.push({ field: 'cnic', message: 'CNIC is required' });
+  if (!personal.gender?.trim()) errors.push({ field: 'gender', message: 'Gender is required' });
+  if (!personal.dob) errors.push({ field: 'dob', message: 'Date of Birth is required' });
+  if (!personal.mobile?.trim()) errors.push({ field: 'mobile', message: 'Mobile number is required' });
+  if (!personal.email?.trim()) errors.push({ field: 'email', message: 'Email is required' });
+  if (!personal.city?.trim()) errors.push({ field: 'city', message: 'City is required' });
+  if (!personal.residentStatus?.trim()) errors.push({ field: 'residentStatus', message: 'Resident Status is required' });
+
+  // Validate CNIC format (basic validation)
+  if (personal.cnic && !/^\d{5}-\d{7}-\d{1}$/.test(personal.cnic) && !/^\d{13}$/.test(personal.cnic)) {
+    errors.push({ field: 'cnic', message: 'CNIC should be in format XXXXX-XXXXXXX-X or 13 digits' });
+  }
+
+  // Validate email format
+  if (personal.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personal.email)) {
+    errors.push({ field: 'email', message: 'Please enter a valid email address' });
+  }
+
+  // Validate mobile number (basic Pakistan format)
+  if (personal.mobile && !/^(\+92|0)?3\d{9}$/.test(personal.mobile.replace(/\s/g, ''))) {
+    errors.push({ field: 'mobile', message: 'Please enter a valid mobile number (e.g., 03XXXXXXXXX)' });
+  }
+
+  // Check for at least one education entry with required fields
+  if (formData.education.length > 0) {
+    formData.education.forEach((edu, index) => {
+      if (edu.degreeTitle?.trim()) {
+        // If degree title is filled, check other fields
+        if (!edu.institute?.trim()) {
+          errors.push({ field: `education-${index}-institute`, message: `Institute is required for education entry ${index + 1}` });
+        }
+      }
+    });
+  }
+
+  return errors;
+};
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
+  // Validate form
+  const validationErrors = validateForm();
+  
+  if (validationErrors.length > 0) {
+    // Show first error in toast
+    toast.error(validationErrors[0].message);
+    
+    // Scroll to first missing field
+    const firstErrorField = validationErrors[0].field;
+    let elementToScroll;
+    
+    if (firstErrorField.includes('education')) {
+      // Handle education fields
+      const index = parseInt(firstErrorField.split('-')[1]);
+      elementToScroll = document.getElementById(`education-${index}`);
+    } else if (firstErrorField.includes('experience')) {
+      // Handle experience fields
+      const index = parseInt(firstErrorField.split('-')[1]);
+      elementToScroll = document.getElementById(`experience-${index}`);
+    } else {
+      // Handle personal fields - find input by name attribute
+      elementToScroll = document.querySelector(`input[name="${firstErrorField}"], select[name="${firstErrorField}"]`);
+    }
+    
+    if (elementToScroll) {
+      elementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add focus if it's an input/select
+      if (elementToScroll.focus) {
+        elementToScroll.focus();
+      }
+    }
+    
+    return;
+  }
+
   if (!isEditMode && (!files.resume || !files.profilePicture)) {
     toast.error('Please upload both resume and profile picture');
+    // Scroll to file upload section
+    const fileUploadSection = document.querySelector('input[type="file"]');
+    if (fileUploadSection) {
+      fileUploadSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     return;
   }
 
